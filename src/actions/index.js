@@ -11,8 +11,11 @@ export function signinUser({ email, password }) {
     axios
       .post(`${ROOT_URL}${PORT}/signin`, { email, password })
       .then(response => {
-        console.log(response);
+        // update state to be auth'd
         dispatch({ type: AUTH_USER });
+        // Save token locally
+        localStorage.setItem('token', response.data.token)
+        // redirect programatically
         history.push("/feature");
       })
       .catch(error => {
