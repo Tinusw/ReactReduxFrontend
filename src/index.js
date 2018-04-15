@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
-import { BrowserRouter, Route, browserHistory } from "react-router-dom";
+import { Router, Route, browserHistory } from "react-router-dom";
+import history from './modules/history'
 import reduxThunk from 'redux-thunk'
 
 import App from "./components/app";
@@ -12,9 +13,9 @@ const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
-    <BrowserRouter history={browserHistory}>
+    <Router history={history}>
       <Route path="/" component={App}/>
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.querySelector(".container")
 );
