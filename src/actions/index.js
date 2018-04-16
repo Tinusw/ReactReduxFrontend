@@ -1,6 +1,5 @@
 import axios from "axios";
 import history from '../modules/history'
-import { browserHistory } from 'react-router';
 
 import { AUTH_USER, UNAUTH_USER, AUTH_ERROR } from "./types";
 
@@ -18,12 +17,16 @@ export function signinUser({ email, password }) {
         localStorage.setItem('token', response.data.token)
         // redirect programatically
         history.push("/feature")
-        // browserHistory.push("/feature");
       })
       .catch(error => {
         dispatch(authError(error.response));
       });
   };
+}
+
+export function signoutUser() {
+  localStorage.removeItem('token')
+  return { type: UNAUTH_USER }
 }
 
 export function authError(error){
