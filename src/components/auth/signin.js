@@ -4,6 +4,13 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class Signin extends Component {
+  shouldComponentUpdate(nextProps) {
+    if(nextProps.authenticated == true){
+      this.props.history.push('/feature')
+    }
+    return true
+  }
+
   handleFormSubmit({ email, password }) {
     this.props.signinUser({ email, password });
   }
@@ -54,7 +61,10 @@ class Signin extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error };
+  return {
+    errorMessage: state.auth.error,
+    authenticated: state.auth.authenticated
+  };
 }
 
 export default reduxForm({

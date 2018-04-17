@@ -1,5 +1,4 @@
 import axios from "axios";
-import history from '../modules/history'
 
 import { AUTH_USER, UNAUTH_USER, AUTH_ERROR } from "./types";
 
@@ -15,8 +14,6 @@ export function signinUser({ email, password }) {
         dispatch({ type: AUTH_USER });
         // Save token locally
         localStorage.setItem('token', response.data.token)
-        // redirect programatically
-        history.push("/feature")
       })
       .catch(error => {
         dispatch(authError(error.response));
