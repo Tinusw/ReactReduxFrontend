@@ -5,10 +5,10 @@ import * as actions from "../../actions";
 
 class Signin extends Component {
   shouldComponentUpdate(nextProps) {
-    if(nextProps.authenticated == true){
-      this.props.history.push('/feature')
+    if (nextProps.authenticated == true) {
+      this.props.history.push("/feature");
     }
-    return true
+    return true;
   }
 
   handleFormSubmit({ email, password }) {
@@ -17,7 +17,10 @@ class Signin extends Component {
 
   renderAlert() {
     if (this.props.errorMessage) {
-      const [status, httpResponse] = [this.props.errorMessage.statusText, this.props.errorMessage.status]
+      const [status, httpResponse] = [
+        this.props.errorMessage.statusText,
+        this.props.errorMessage.status
+      ];
       return (
         <div className="alert alert-danger">
           <strong>Error</strong>: {`${status} - ${httpResponse}`}
@@ -30,7 +33,10 @@ class Signin extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <form className="Signin" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+      <form
+        className="Signin"
+        onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+      >
         <fieldset className="form-group">
           <label>Email:</label>
           <Field
