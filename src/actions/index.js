@@ -6,7 +6,7 @@ const ROOT_URL = "http://localhost:";
 const PORT = "3030";
 
 export function signinUser({ email, password }) {
-  return function(dispatch) {
+  return ((dispatch) => {
     axios
       .post(`${ROOT_URL}${PORT}/signin`, { email, password })
       .then(response => {
@@ -16,19 +16,12 @@ export function signinUser({ email, password }) {
         localStorage.setItem('token', response.data.token)
       })
       .catch(error => {
-        dispatch(authError(error.response));
+        dispatch({ type: AUTH_USER, payload: error });
       });
-  };
+  });
 }
 
 export function signoutUser() {
   localStorage.removeItem('token')
   return { type: UNAUTH_USER }
-}
-
-export function authError(error){
-  return {
-    type: AUTH_ERROR,
-    payload: error
-  }
 }
