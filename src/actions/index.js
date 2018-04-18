@@ -7,8 +7,7 @@ const PORT = "3030";
 
 export function signinUser({ email, password }) {
   return ((dispatch) => {
-    axios
-      .post(`${ROOT_URL}${PORT}/signin`, { email, password })
+    return axios.post(`${ROOT_URL}${PORT}/signin`, { email, password })
       .then(response => {
         // update state to be auth'd
         dispatch({ type: AUTH_USER });
@@ -16,6 +15,7 @@ export function signinUser({ email, password }) {
         localStorage.setItem('token', response.data.token)
       })
       .catch(error => {
+        // console.log(error)
         dispatch({ type: AUTH_ERROR, payload: error });
       });
   });

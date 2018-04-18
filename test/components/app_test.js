@@ -1,20 +1,13 @@
-import { renderComponent, expect } from "../test_helper";
-import { JSDOM } from 'jsdom';
-import App from "../../src/components/app";
+// import { renderComponent, expect } from "../test_helper";
+// import App from "../../src/components/app";
 
-// Use describe to group similar tests together
 // describe("App Component", () => {
-  // let component;
-  // beforeEach(() => {
-  //   component = renderComponent(App)
-  //   render(
-  //     <MemoryRouter initialEntries={[ '/signin' ]}>
-  //       {component}
-  //     </MemoryRouter>
-  //   )
-  // })
+//   let component;
+//   beforeEach(() => {
+//     component = renderComponent(App)
+//   })
 
-  // it("renders the Header Component", () => {
-  //   expect(component.find('.CommentBox')).to.exist
-  // });
+//   it("renders the Header Component", () => {
+//     expect(component.find('.App')).to.exist
+//   });
 // });

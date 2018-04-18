@@ -3,12 +3,30 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import moxios from 'moxios';
 
-import { AUTH_USER } from "../../src/actions/types";
+import mockLocalStorage from './mock_local_storage';
 
 import { signinUser } from "../../src/actions/index";
+import { AUTH_USER } from "../../src/actions/types";
 
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+// Fake Response
+const AuthSuccess = {
+  data: {
+    token: '1234'
+  }
+}
+
+// Fake Data
+const data = {
+  email: 'test@test1.com',
+  password: '1234'
+}
+
+const middlewares = [thunk];
+
+const mockStore = configureMockStore(middlewares);
+
+window.localStorage = mockLocalStorage;
+
 let store;
 let url;
 
@@ -39,6 +57,7 @@ describe('AUTH ACTION', () => {
       const actualAction = store.getActions()
       expect(actualAction).to.eql(expectedAction)
     })
+    done()
   })
 })
 
