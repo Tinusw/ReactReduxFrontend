@@ -1,15 +1,36 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import * as actions from '../../actions'
-import { renderField } from '../form/field'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+import * as actions from "../../actions";
+import { renderField } from "../form/field";
 
-const required = value => (value ? undefined : 'Required')
+// Passed down to our field component to set required="true"
+const required = value => (value ? undefined : "Required");
 
 class SignUp extends Component {
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.authenticated == true) {
+      this.props.history.push("/feature");
+    }
+    return true;
+  }
 
-  handleFormSubmit({email, password }) {
-    this.props.signUpUser({ email, password })
+  handleFormSubmit({ email, password }) {
+    this.props.signUpUser({ email, password });
+  }
+
+  renderAlert() {
+    if (this.props.errorMessage) {
+      const [status, httpResponse] = [
+        this.props.errorMessage.data.error,
+        this.props.errorMessage.status
+      ];
+      return (
+        <div className="alert alert-danger">
+          <strong>Error</strong>: {`${status} - ${httpResponse}`}
+        </div>
+      );
+    }
   }
 
   render() {
@@ -38,29 +59,35 @@ class SignUp extends Component {
           label="Password Confirmation"
           validate={[required]}
         />
-        <button type="submit" className="btn btn-primary">Sign Up</button>
+        {this.renderAlert()}
+        <button type="submit" className="btn btn-primary">
+          Sign Up
+        </button>
       </form>
     );
   }
 }
 
 function validate(values) {
-  let errors = {}
+  let errors = {};
 
   if (values.password != values.password_confirmation) {
-    errors.password = 'Password and password confirmation don\'t match!'
+    errors.password = "Password and password confirmation don't match!";
   }
 
-  return errors
+  return errors;
 }
 
 function mapStateToProps(state) {
   return {
-    errorMessage: state.auth.error
-  }
+    errorMessage: state.auth.error,
+    authenticated: state.auth.authenticated
+  };
 }
 
-export default connect(mapStateToProps, actions)(reduxForm({
-  form:'SignUp',
-  validate
-})(SignUp));
+export default connect(mapStateToProps, actions)(
+  reduxForm({
+    form: "SignUp",
+    validate
+  })(SignUp)
+);

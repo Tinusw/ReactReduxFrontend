@@ -20,6 +20,21 @@ export function signinUser({ email, password }) {
   });
 }
 
+export function signUpUser({ email, password }) {
+  return ((dispatch) => {
+    return axios.post(`${ROOT_URL}${PORT}/signup`, { email, password })
+      .then(response => {
+        // update state to be auth'd
+        dispatch({ type: AUTH_USER });
+        // Save token locally
+        localStorage.setItem('token', response.data.token)
+      })
+      .catch(error => {
+        dispatch({ type: AUTH_ERROR, payload: error });
+      });
+  });
+}
+
 export function signoutUser() {
   localStorage.removeItem('token')
   return { type: UNAUTH_USER }

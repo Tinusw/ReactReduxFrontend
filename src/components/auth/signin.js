@@ -22,7 +22,7 @@ class Signin extends Component {
   renderAlert() {
     if (this.props.errorMessage) {
       const [status, httpResponse] = [
-        this.props.errorMessage.statusText,
+        this.props.errorMessage.data.error || this.props.errorMessage.statusText,
         this.props.errorMessage.status
       ];
       return (
