@@ -8,19 +8,26 @@ describe("Campaign reducer", () => {
   });
 
   it("should handle FETCH_CAMPAIGNS", () => {
-    let success_response = {
-      message: "YAAY for making authorized requests bro"
-    };
+    let success_response = [
+      { id: 1, name: "test1" },
+      { id: 2, name: "test1" },
+      { id: 3, name: "test1" }
+    ];
 
     expect(
-      reducer({},
+      reducer(
+        {},
         {
           type: FETCH_CAMPAIGNS,
           payload: success_response
         }
       )
     ).to.eql({
-      fetch_message: "YAAY for making authorized requests bro"
+      collection: [
+        { id: 1, name: "test1" },
+        { id: 2, name: "test1" },
+        { id: 3, name: "test1" }
+      ]
     });
   });
 });
