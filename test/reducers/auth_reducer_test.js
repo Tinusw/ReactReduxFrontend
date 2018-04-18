@@ -2,7 +2,7 @@ import { expect } from "../test_helper";
 import reducer from '../../src/reducers/auth_reducer'
 import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from "../../src/actions/types";
 
-describe('auth reducer', () => {
+describe('Auth reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).to.eql({})
   })
@@ -13,7 +13,8 @@ describe('auth reducer', () => {
         type: AUTH_USER
       })
     ).to.eql({
-      authenticated: true
+      authenticated: true,
+      error: ''
     })
   })
 

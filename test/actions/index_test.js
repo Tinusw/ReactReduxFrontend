@@ -5,8 +5,8 @@ import moxios from "moxios";
 
 import { storageMock } from "./mock_local_storage";
 
-import { signinUser, signoutUser, signUpUser } from "../../src/actions/index";
-import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from "../../src/actions/types";
+import { signinUser, signoutUser, signUpUser, fetchCampaigns } from "../../src/actions/index";
+import { AUTH_USER, AUTH_ERROR, UNAUTH_USER, FETCH_CAMPAIGNS } from "../../src/actions/types";
 
 global.localStorage = storageMock();
 
@@ -38,7 +38,7 @@ const mockStore = configureMockStore(middlewares);
 let store;
 let url;
 
-describe("AUTH ACTION", () => {
+describe("AUTH ACTIONS", () => {
   beforeEach(() => {
     moxios.install();
     store = mockStore({});
@@ -162,3 +162,66 @@ describe("AUTH ACTION", () => {
     });
   })
 });
+
+describe("CAMPAIGN ACTIONS", () => {
+  beforeEach(() => {
+    moxios.install();
+    store = mockStore({});
+    url = "http://localhost:3030";
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  let header = { token: 'pew'}
+
+  it("returns success message and dispatches FETCH_CAMPAIGNS", done => {
+    const fetchSuccess = {
+      response: {
+        data: {
+          message: "yaaay"
+        }
+      }
+    };
+
+    moxios.stubRequest(
+      header,
+      url, {
+      status: 200,
+      response: {
+        data: {
+          message: "yaaaay"
+        }
+      }
+    });
+
+    const expectedAction = { type: FETCH_CAMPAIGNS, payload: fetchSuccess };
+
+    store.dispatch(fetchCampaigns()).then(() => {
+      const actualAction = store.getActions();
+      expect(actualAction).to.eql(expectedAction);
+    });
+    done();
+  })
+
+  it("returns error message on error and dispatches AUTH_ERROR", done => {
+    moxios.stubRequest(url, {
+        status: 401,
+        response: {
+          data: "Unauthorized",
+          status: 401
+        }
+      });
+
+      const expectedAction = { type: AUTH_ERROR, payload: AuthFailure };
+
+      store.dispatch(fetchCampaigns()).then(() => {
+        const actualAction = store.getActions();
+        expect(actualAction).to.eql(expectedAction);
+      });
+      done();
+  })
+})
+
+

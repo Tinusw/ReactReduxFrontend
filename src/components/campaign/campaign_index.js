@@ -1,9 +1,21 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import * as actions from '../../actions/index'
 
-export default class CampaignIndex extends Component {
+class CampaignIndex extends Component {
+  componentWillMount() {
+    this.props.fetchCampaigns();
+  }
   render() {
     return (
-      <div>CAMPAIGNS</div>
+      <div>{this.props.campaigns}</div>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    campaigns: state.campaigns.fetch_message
+  };
+}
+export default connect(mapStateToProps, actions)(CampaignIndex)
