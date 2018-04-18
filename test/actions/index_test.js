@@ -38,7 +38,7 @@ const mockStore = configureMockStore(middlewares);
 let store;
 let url;
 
-describe("AUTH ACTIONS", () => {
+describe("AUTH ACTION CREATORS", () => {
   beforeEach(() => {
     moxios.install();
     store = mockStore({});
@@ -163,7 +163,7 @@ describe("AUTH ACTIONS", () => {
   })
 });
 
-describe("CAMPAIGN ACTIONS", () => {
+describe("CAMPAIGN ACTION CREATORS", () => {
   beforeEach(() => {
     moxios.install();
     store = mockStore({});

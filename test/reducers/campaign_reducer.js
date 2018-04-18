@@ -2,7 +2,7 @@ import { expect } from "../test_helper";
 import reducer from "../../src/reducers/campaign_reducer";
 import { FETCH_CAMPAIGNS } from "../../src/actions/types";
 
-describe("Campaign reducer", () => {
+describe("CAMPAIGN REDUCER", () => {
   it("should return the initial state", () => {
     expect(reducer(undefined, {})).to.eql({});
   });
