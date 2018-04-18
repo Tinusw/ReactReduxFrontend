@@ -14,7 +14,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Route path={"/"} component={Root}/>
+        <Route exact path={"/"} component={Root}/>
         <Route path={"/signin"} component={Signin}/>
         <Route path={"/signout"} component={Signout}/>
         <Route path={"/signup"} component={Signup}/>
