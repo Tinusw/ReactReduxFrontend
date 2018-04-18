@@ -1,15 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import App from './components/app';
-import reducers from './reducers';
+import reduxThunk from 'redux-thunk'
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+import App from "./components/app";
+import reducers from "./reducers";
+
+const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-, document.querySelector('.container'));
+  <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+    <BrowserRouter >
+      <Route path="/" component={App}/>
+    </BrowserRouter>
+  </Provider>,
+  document.querySelector(".container")
+);
