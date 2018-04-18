@@ -17,6 +17,16 @@ describe('auth reducer', () => {
     })
   })
 
+  it('should handle UNAUTH_USER', () => {
+    expect(
+      reducer({}, {
+        type: UNAUTH_USER
+      })
+    ).to.eql({
+      authenticated: false
+    })
+  })
+
   it('should handle AUTH_ERROR', () => {
     let error = {
       response: {
