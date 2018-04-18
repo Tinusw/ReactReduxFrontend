@@ -1,36 +1,44 @@
 import { expect } from "../test_helper";
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import moxios from 'moxios';
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import moxios from "moxios";
 
-import mockLocalStorage from './mock_local_storage';
+import { storageMock } from "./mock_local_storage";
 
-import { signinUser } from "../../src/actions/index";
-import { AUTH_USER } from "../../src/actions/types";
+import { signinUser, signoutUser } from "../../src/actions/index";
+import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from "../../src/actions/types";
 
-// Fake Response
+global.localStorage = storageMock();
+
+// Fake success response
 const AuthSuccess = {
   data: {
-    token: '1234'
+    token: "1234"
   }
-}
+};
+
+// Fake success response
+const AuthFailure = {
+  response: {
+    data: "Unauthorized",
+    status: 401
+  }
+};
 
 // Fake Data
 const data = {
-  email: 'test@test1.com',
-  password: '1234'
-}
+  email: "test@test1.com",
+  password: "1234"
+};
 
 const middlewares = [thunk];
 
 const mockStore = configureMockStore(middlewares);
 
-window.localStorage = mockLocalStorage;
-
 let store;
 let url;
 
-describe('AUTH ACTION', () => {
+describe("AUTH ACTION", () => {
   beforeEach(() => {
     moxios.install();
     store = mockStore({});
@@ -40,86 +48,52 @@ describe('AUTH ACTION', () => {
     moxios.uninstall();
   });
 
-  it('create a token on AUTH USER', (done) => {
+  it("create a token on AUTH USER", done => {
     moxios.stubRequest(url, {
       status: 200,
       response: {
         data: {
-          token: 'sample_token'
+          token: "sample_token"
         }
-      },
+      }
     });
 
-    const expectedAction = { type: AUTH_USER }
+    const expectedAction = { type: AUTH_USER };
 
-    let testData = { email: "test1@test.com", password: "1234"}
+    let testData = { email: "test1@test.com", password: "1234" };
     store.dispatch(signinUser(testData)).then(() => {
-      const actualAction = store.getActions()
-      expect(actualAction).to.eql(expectedAction)
-    })
-    done()
-  })
-})
+      const actualAction = store.getActions();
+      expect(actualAction).to.eql(expectedAction);
+    });
+    done();
+  });
 
+  it("returns an error on AUTH_ERROR", done => {
+    moxios.stubRequest(url, {
+      status: 401,
+      response: {
+        data: "Unauthorized",
+        status: 401
+      }
+    });
 
+    const expectedAction = { type: AUTH_ERROR, payload: AuthFailure };
 
-// describe('All actions', function description() {
-//   beforeEach("fake server", () => moxios.install());
-//   afterEach("fake server", () => moxios.uninstall());
+    let testData = { email: "test1@test.com", password: "124" };
+    store.dispatch(signinUser(testData)).then(() => {
+      const actualAction = store.getActions();
+      expect(actualAction).to.eql(expectedAction);
+    });
+    done();
+  });
 
-//   it("should return an action to get All Analysis", (done) => {
-//     // GIVEN
-//     const disptach = sinon.spy();
-//     const expectedAction = { type: AUTH_USER };
-//     const expectedUrl = "http://localhost:3000";
-//     moxios.stubRequest(expectedUrl, { status: 200, response: "dummyResponse" });
+  it("returns authenticated false on UNAUTH_USER", () => {
+    beforeEach(() => {
+      localStorage.setItem("token", "test");
+    });
 
-//     // WHEN
-//     let testData = { email: "test1@test.com", password: "1234"}
-//     signinUser(dispatch)(testData);
-
-//     // THEN
-//     moxios.wait(() => {
-//         sinon.assert.calledWith(dispatch, {
-//             type: AUTH_USER,
-//             payload: "dummyResponse"
-//         });
-//         done();
-//     });
-//   });
-// });
-
-
-
-// const mockStore = configureStore([thunk])
-
-// describe('auth actions', () => {
-//   beforeEach(() => {
-//     moxios.install();
-//   });
-
-//   afterEach(() => {
-//     moxios.uninstall();
-//   });
-
-
-
-//   it("should return an access token", (done) => {
-//     const disptach = sinon.spy();
-//     moxios.stubRequest("http://localhost:3030", {
-//       status: 200,
-//       response: {
-//         data: {
-//           token: "test"
-//         }
-//       }
-//     })
-
-//     let valid_data = { email: 'test1@test.com', password: '1234' }
-//     signinUser(dispatch)(valid_data)
-
-//     moxios.wait(() => {
-//       expect(signinUser).to.have.been.called.with(valid_data)
-//     })
-//   })
-// })
+    const expectedAction = { type: UNAUTH_USER };
+    const actualAction = store.getActions();
+    expect(signoutUser()).to.eql(expectedAction);
+  });
+});

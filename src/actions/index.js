@@ -15,7 +15,6 @@ export function signinUser({ email, password }) {
         localStorage.setItem('token', response.data.token)
       })
       .catch(error => {
-        // console.log(error)
         dispatch({ type: AUTH_ERROR, payload: error });
       });
   });
