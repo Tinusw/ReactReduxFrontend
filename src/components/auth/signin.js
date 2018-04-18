@@ -10,7 +10,7 @@ const required = value => (value ? undefined : 'Required')
 class Signin extends Component {
   shouldComponentUpdate(nextProps) {
     if (nextProps.authenticated == true) {
-      this.props.history.push("/feature");
+      this.props.history.push("/campaign/index");
     }
     return true;
   }
