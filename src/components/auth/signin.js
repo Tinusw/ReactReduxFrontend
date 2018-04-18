@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import { renderField } from '../form/field'
+
+// Passed down to field component to enable require="true"
+const required = value => (value ? undefined : 'Required')
 
 class Signin extends Component {
   shouldComponentUpdate(nextProps) {
@@ -38,23 +42,19 @@ class Signin extends Component {
         onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
       >
         <fieldset className="form-group">
-          <label>Email:</label>
           <Field
             name="email"
-            component="input"
-            type="text"
-            className="form-control"
-            required="true"
+            component={renderField}
+            type="email"
+            validate={[required]}
+            label="Email"
           />
-        </fieldset>
-        <fieldset className="form-group">
-          <label>password:</label>
           <Field
             name="password"
-            component="input"
+            component={renderField}
             type="password"
-            className="form-control"
-            required="true"
+            validate={[required]}
+            label="password"
           />
         </fieldset>
         {this.renderAlert()}

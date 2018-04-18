@@ -1,50 +1,66 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
-import * as actions from "../../actions";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Field, reduxForm } from 'redux-form'
+import * as actions from '../../actions'
+import { renderField } from '../form/field'
 
-class Signup extends Component {
+const required = value => (value ? undefined : 'Required')
+
+class SignUp extends Component {
+
+  handleFormSubmit({email, password }) {
+    this.props.signUpUser({ email, password })
+  }
+
   render() {
     const { handleSubmit } = this.props;
-    console.log(this.props)
-    return (
-      <form onSubmit={handleSubmit}>
-        <fieldset className="form-group">
-          <label htmlFor="email">Email</label>
-          <Field name="email" component="input" type="email" className="form-control"/>
 
-          <label htmlFor="password">password</label>
-          <Field name="password" component="input" type="password" className="form-control"/>
-          <label htmlFor="passwordConfirm">passwordConfirm</label>
-          <Field name="passwordConfirm" component="input" type="password" className="form-control"/>
-        </fieldset>
-        <button action="submit" className="btn btn-primary">
-          Sign up
-        </button>
+    return (
+      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+        <Field
+          name="email"
+          component={renderField}
+          type="email"
+          validate={[required]}
+          label="Email"
+        />
+        <Field
+          name="password"
+          component={renderField}
+          type="password"
+          label="Password"
+          validate={[required]}
+        />
+        <Field
+          name="password_confirmation"
+          component={renderField}
+          type="password"
+          label="Password Confirmation"
+          validate={[required]}
+        />
+        <button type="submit" className="btn btn-primary">Sign Up</button>
       </form>
     );
   }
 }
 
-// function validate(formProps) {
-//   const errors = {};
-//   if (formProps.password !== formProps.passwordConfirm) {
-//     errors.password = "Passwords must match";
-//   }
-//   console.log("pew");
-//   return errors;
-// }
+function validate(values) {
+  let errors = {}
 
-const validate = values => {
-  const errors = {}
-  if (values.password !== values.passwordConfirm) {
-    errors.age = 'Sorry, you must be at least 18 years old'
+  if (values.password != values.password_confirmation) {
+    errors.password = 'Password and password confirmation don\'t match!'
   }
+
   return errors
 }
 
-Signup = reduxForm({
-  form: "signup",
-  validate
-})(Signup);
+function mapStateToProps(state) {
+  return {
+    errorMessage: state.auth.error
+  }
+}
 
-export default Signup;
+export default connect(mapStateToProps, actions)(reduxForm({
+  form:'SignUp',
+  validate
+})(SignUp));
