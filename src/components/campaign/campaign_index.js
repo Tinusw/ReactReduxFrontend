@@ -8,14 +8,18 @@ class CampaignIndex extends Component {
   }
   render() {
     return (
-      <div>{this.props.campaigns}</div>
+      <div>
+        <p>Success:{this.props.campaigns}</p>
+        <p>Fail:{this.props.error.data}</p>
+      </div>
     )
   }
 }
 
 function mapStateToProps(state) {
   return {
-    campaigns: state.campaigns.fetch_message
+    campaigns: state.campaigns.fetch_message,
+    error: state.auth.error
   };
 }
 export default connect(mapStateToProps, actions)(CampaignIndex)
