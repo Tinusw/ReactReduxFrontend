@@ -2,15 +2,14 @@ import _$ from "jquery";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
-// import { JSDOM } from 'jsdom';
+import { JSDOM } from 'jsdom';
 import chai, { expect } from "chai";
 import chaiJquery from "chai-jquery";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import reducers from "../src/reducers";
-import { Route, Link, MemoryRouter } from "react-router-dom";
-
-import { JSDOM } from "jsdom";
+import { Route, Link } from "react-router-dom";
+import MockRouter from 'react-mock-router';
 
 const { window } = new JSDOM("<!doctype html><html><body></body></html>");
 
@@ -25,13 +24,16 @@ const $ = _$(window);
 chaiJquery(chai, chai.util, $);
 
 function renderComponent(ComponentClass, props = {}, state = {}) {
+
   const componentInstance = TestUtils.renderIntoDocument(
     <Provider store={createStore(reducers, state)}>
-      <MemoryRouter initialEntries={["/signin"]}>
-        <ComponentClass {...props} />
-      </MemoryRouter>
+      <MockRouter location={props.location}>
+        <ComponentClass {...props}/>
+      </MockRouter>
     </Provider>
   );
+
+  console.log(componentInstance)
 
   return $(ReactDOM.render(componentInstance));
 }

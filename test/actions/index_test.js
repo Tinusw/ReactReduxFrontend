@@ -63,6 +63,7 @@ describe("AUTH ACTION CREATORS", () => {
       let testData = { email: "test1@test.com", password: "1234" };
       store.dispatch(signinUser(testData)).then(() => {
         const actualAction = store.getActions();
+        expect(localStorage.setItem()).to.be.called.with('token', "sample_token")
         expect(actualAction).to.eql(expectedAction);
       });
       done();

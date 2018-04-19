@@ -1,15 +1,17 @@
 export function storageMock() {
-  var storage = {};
-
+  let store = {}
   return {
-    setItem: function(key, value) {
-      storage[key] = value || "";
-    },
     getItem: function(key) {
-      return key in storage ? storage[key] : null;
+      return store[key] || null
+    },
+    setItem: function(key, value) {
+      store[key] = value.toString()
     },
     removeItem: function(key) {
-      delete storage[key];
-    }
-  };
-}
+      delete store[key]
+    },
+    clear: function() {
+      store = {}
+    },
+  }
+};
