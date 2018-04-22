@@ -11,27 +11,6 @@ import { AUTH_USER, AUTH_ERROR, UNAUTH_USER } from "../../src/actions/types";
 
 global.localStorage = storageMock();
 
-// Fake success response
-const AuthSuccess = {
-  data: {
-    token: "1234"
-  }
-};
-
-// Fake failure response
-const AuthFailure = {
-  response: {
-    data: "Unauthorized",
-    status: 401
-  }
-};
-
-// Fake Data
-const data = {
-  email: "test@test1.com",
-  password: "1234"
-};
-
 const middlewares = [thunk];
 
 const mockStore = configureMockStore(middlewares);
@@ -53,7 +32,7 @@ describe("AUTH ACTION CREATORS", () => {
   describe("signinUser()", () => {
     it("create a token on AUTH USER", () => {
       moxios.wait(() => {
-        let request = moxios.requests.mostRecent()
+        let request = moxios.requests.mostRecent();
         request.respondWith({
           status: 200,
           response: {
@@ -61,8 +40,8 @@ describe("AUTH ACTION CREATORS", () => {
               token: "sample_token"
             }
           }
-        })
-      })
+        });
+      });
       const expectedAction = { type: AUTH_USER };
       let testData = { email: "test1@test.com", password: "1234" };
       return store.dispatch(signinUser(testData)).then(() => {
@@ -73,23 +52,28 @@ describe("AUTH ACTION CREATORS", () => {
 
     it("returns an error on AUTH_ERROR with 401", () => {
       moxios.wait(() => {
-        let request = moxios.requests.mostRecent()
+        let request = moxios.requests.mostRecent();
         request.respondWith({
           status: 401,
           response: {
             data: "Unauthorized",
             status: 401
           }
-        })
-      })
+        });
+      });
 
-      const expectedAction = { type: AUTH_ERROR, payload: "Error: Request failed with status code 401" };
+      const expectedAction = {
+        type: AUTH_ERROR,
+        payload: "Error: Request failed with status code 401"
+      };
 
       let testData = { email: "test1@test.com", password: "124" };
       return store.dispatch(signinUser(testData)).then(() => {
         const actualAction = store.getActions();
         expect(actualAction[0].type).to.eql(expectedAction.type);
-        expect(actualAction[0].payload.toString()).to.eql(expectedAction.payload);
+        expect(actualAction[0].payload.toString()).to.eql(
+          expectedAction.payload
+        );
       });
     });
   });
@@ -97,7 +81,7 @@ describe("AUTH ACTION CREATORS", () => {
   describe("signUpUser()", () => {
     it("create a token on AUTH USER", () => {
       moxios.wait(() => {
-        let request = moxios.requests.mostRecent()
+        let request = moxios.requests.mostRecent();
         request.respondWith({
           status: 201,
           response: {
@@ -105,8 +89,8 @@ describe("AUTH ACTION CREATORS", () => {
               token: "sample_token"
             }
           }
-        })
-      })
+        });
+      });
 
       const expectedAction = { type: AUTH_USER };
 
@@ -119,46 +103,56 @@ describe("AUTH ACTION CREATORS", () => {
 
     it("returns an error on AUTH_ERROR with 401", () => {
       moxios.wait(() => {
-        let request = moxios.requests.mostRecent()
+        let request = moxios.requests.mostRecent();
         request.respondWith({
           status: 401,
           response: {
             data: "Unauthorized",
             status: 401
           }
-        })
-      })
+        });
+      });
 
-      const expectedAction = { type: AUTH_ERROR, payload: "Error: Request failed with status code 401" };
+      const expectedAction = {
+        type: AUTH_ERROR,
+        payload: "Error: Request failed with status code 401"
+      };
 
       let testData = { email: "test1@test.com", password: "124" };
       return store.dispatch(signinUser(testData)).then(() => {
         const actualAction = store.getActions();
         expect(actualAction[0].type).to.eql(expectedAction.type);
-        expect(actualAction[0].payload.toString()).to.eql(expectedAction.payload);
+        expect(actualAction[0].payload.toString()).to.eql(
+          expectedAction.payload
+        );
       });
     });
 
     describe("if email is in use", () => {
       it("returns an error on AUTH_ERROR with 422", () => {
         moxios.wait(() => {
-          let request = moxios.requests.mostRecent()
+          let request = moxios.requests.mostRecent();
           request.respondWith({
             status: 422,
             response: {
               data: "Email is in use",
               status: 422
             }
-          })
-        })
+          });
+        });
 
-        const expectedAction = { type: AUTH_ERROR, payload: 'Error: Request failed with status code 422' };
+        const expectedAction = {
+          type: AUTH_ERROR,
+          payload: "Error: Request failed with status code 422"
+        };
 
         let testData = { email: "test1@test.com", password: "124" };
         return store.dispatch(signinUser(testData)).then(() => {
           const actualAction = store.getActions();
           expect(actualAction[0].type).to.eql(expectedAction.type);
-          expect(actualAction[0].payload.toString()).to.eql(expectedAction.payload);
+          expect(actualAction[0].payload.toString()).to.eql(
+            expectedAction.payload
+          );
         });
       });
     });
@@ -176,4 +170,3 @@ describe("AUTH ACTION CREATORS", () => {
     });
   });
 });
-
